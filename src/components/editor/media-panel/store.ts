@@ -9,7 +9,8 @@ import {
   IconVideo,
   IconWaveSine,
 } from "@tabler/icons-react";
-import type { ElementType } from "react";
+
+import type { ComponentType } from "react";
 import { create } from "zustand";
 
 export type Tab =
@@ -26,9 +27,10 @@ export type Tab =
   | "transitions";
 
 export type MediaTabConfig = {
-  icon: ElementType<IconProps>;
+  icon: ComponentType<IconProps>;
   label: string;
 };
+const IconsTransition: ComponentType<IconProps> = Icons.transition as ComponentType<IconProps>;
 
 export const tabs = {
   uploads: {
@@ -60,7 +62,7 @@ export const tabs = {
     label: "音效",
   },
   transitions: {
-    icon: Icons.transition,
+    icon: IconsTransition,
     label: "转场",
   },
   // captions/effects/elements are intentionally hidden for now.
