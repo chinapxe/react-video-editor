@@ -12,6 +12,13 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/screenshots/screenshot-1.png" alt="编辑器主界面" width="100%"/>
+</p>
+<p align="center">
+  <img src="docs/screenshots/screenshot-2.png" alt="属性面板与预览" width="100%"/>
+</p>
+
 > **Fork 声明**：本项目 fork 自 [openvideodev/react-video-editor](https://github.com/openvideodev/react-video-editor)，版权归 OpenVideoDev 所有，遵循 [AGPL-3.0](LICENSE) 协议。本版本的修改部分版权归本项目贡献者所有，同样遵循 AGPL-3.0。
 
 ---
