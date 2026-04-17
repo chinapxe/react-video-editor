@@ -47,6 +47,12 @@
 }
 
 :root {
+  --font-space-grotesk:
+    "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  --font-geist-sans: var(--font-space-grotesk);
+  --font-geist-mono:
+    "Cascadia Code", "JetBrains Mono", "SFMono-Regular", "Consolas", "Liberation Mono",
+    monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);

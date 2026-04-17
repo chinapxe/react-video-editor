@@ -153,7 +153,7 @@ export function TimelineClipMenu({ timelineCanvas }: TimelineClipMenuProps) {
 
   if (!menuPosition || !activeClip || !isSelected || activeClip.type === "Transition") return null;
 
-  const isLocked = activeClip.locked;
+  const isLocked = !!(activeClip as any)?.locked;
 
   return (
     <div

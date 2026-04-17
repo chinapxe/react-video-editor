@@ -197,7 +197,7 @@ export default function ProjectsPage() {
     try {
       const existingProject = await storageService.loadProject({ id: projectId });
       if (existingProject) {
-        router.replace(`/edit/${encodeURIComponent(existingProject.id)}`);
+        router.replace(`/edit/${encodeURIComponent(existingProject.id)}?aifilm=1`);
         return;
       }
 
@@ -208,7 +208,7 @@ export default function ProjectsPage() {
         ratio: externalRatio,
       });
       await storageService.saveProject({ project: newProject });
-      router.replace(`/edit/${encodeURIComponent(newProject.id)}`);
+      router.replace(`/edit/${encodeURIComponent(newProject.id)}?aifilm=1`);
     } catch (error) {
       console.error("Failed to open/create project from external link", error);
       await loadProjects();

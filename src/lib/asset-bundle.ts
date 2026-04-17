@@ -150,8 +150,7 @@ async function loadAifilmAssets(projectId?: string) {
     if (projectId?.trim()) {
       query.set("projectId", projectId.trim());
     }
-    const endpoint =
-      query.size > 0 ? `/api/aifilm/media?${query.toString()}` : "/api/aifilm/media";
+    const endpoint = query.size > 0 ? `/api/aifilm/media?${query.toString()}` : "/api/aifilm/media";
     const response = await fetch(endpoint, { cache: "no-store" });
     const payload = (await response.json().catch(() => ({}))) as {
       items?: AifilmMediaItem[];
@@ -188,12 +187,11 @@ async function loadLocalOpfsAssets() {
   }));
 }
 
-function upsertAsset(
-  map: Map<string, BundleAsset>,
-  asset: BundleAsset,
-  fallbackSerial: number,
-) {
-  const key = asset.source === "local" && asset.id ? `local:${asset.id}` : `src:${asset.src || fallbackSerial}`;
+function upsertAsset(map: Map<string, BundleAsset>, asset: BundleAsset, fallbackSerial: number) {
+  const key =
+    asset.source === "local" && asset.id
+      ? `local:${asset.id}`
+      : `src:${asset.src || fallbackSerial}`;
   const existing = map.get(key);
   if (!existing) {
     map.set(key, asset);
@@ -226,8 +224,10 @@ function triggerDownload(blob: Blob, fileName: string) {
 
 export async function createAndDownloadProjectAssetBundle({
   projectId,
+  includeAifilm = false,
 }: {
   projectId?: string;
+  includeAifilm?: boolean;
 }): Promise<ProjectAssetBundleResult> {
   if (typeof window === "undefined") {
     throw new Error("Asset bundling is only available in the browser.");
@@ -237,7 +237,9 @@ export async function createAndDownloadProjectAssetBundle({
   const [localStorageAssets, opfsAssets, remote] = await Promise.all([
     Promise.resolve(parseLocalStorageAssets()),
     loadLocalOpfsAssets(),
-    loadAifilmAssets(projectId),
+    includeAifilm
+      ? loadAifilmAssets(projectId)
+      : Promise.resolve({ assets: [] as BundleAsset[], warnings: [] as string[] }),
   ]);
 
   warnings.push(...remote.warnings);

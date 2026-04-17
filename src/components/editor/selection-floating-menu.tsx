@@ -45,7 +45,7 @@ export function SelectionFloatingMenu() {
     if (!studio || selectedClips.length === 0) return;
     const clip = selectedClips[0] as any;
     const newLocked = !clip.locked;
-    await studio.lockClip(clip.id, newLocked);
+    await (studio as any).lockClip(clip.id, newLocked);
     setIsLocked(newLocked);
   }, [studio, selectedClips]);
 

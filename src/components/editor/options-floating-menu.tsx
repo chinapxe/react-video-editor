@@ -82,7 +82,7 @@ export function useClipActions(clipOverride?: any) {
 
   const handleToggleLock = useCallback(async () => {
     if (!studio || !selectedClip) return;
-    await studio.lockClip(selectedClip.id, !selectedClip.locked);
+    await (studio as any).lockClip(selectedClip.id, !selectedClip.locked);
   }, [studio, selectedClip]);
 
   const handleDelete = useCallback(async () => {

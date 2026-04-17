@@ -71,7 +71,7 @@ export function TimelineToolbar({
   const originalVolumeByClipIdRef = useRef<Map<string, number>>(new Map());
 
   const isSelected = selectedClips.length > 0;
-  const isLocked = selectedClips.some((clip) => clip.locked);
+  const isLocked = selectedClips.some((clip) => !!(clip as any)?.locked);
 
   const getVideoClips = () => {
     const studioClips = (((studio as any)?.clips || []) as any[]).filter(

@@ -38,6 +38,7 @@ export function PropertiesPanel({ selectedClips }: { selectedClips: IClip[] }) {
   }
 
   const clip = selectedClips[0];
+  const isLocked = !!(clip as any)?.locked;
 
   const renderSpecificProperties = () => {
     switch (clip.type) {
@@ -65,7 +66,7 @@ export function PropertiesPanel({ selectedClips }: { selectedClips: IClip[] }) {
       <div
         className={cn(
           "flex flex-col gap-4 p-4 transition-opacity",
-          clip.locked && "opacity-50 pointer-events-none select-none",
+          isLocked && "opacity-50 pointer-events-none select-none",
         )}
       >
         {renderSpecificProperties()}

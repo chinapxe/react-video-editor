@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "../ui/mode-toggle";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { storageService } from "@/lib/storage/storage-service";
 import { Save } from "lucide-react";
 import { createAndDownloadProjectAssetBundle } from "@/lib/asset-bundle";
@@ -51,11 +51,16 @@ export default function Header() {
   const [customHeight, setCustomHeight] = useState("");
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const projectId = params.projectId as string;
   const { data: session } = authClient.useSession();
   const { projectName, setProjectName } = useProjectStore();
   const [isSaving, setIsSaving] = useState(false);
   const [title, setTitle] = useState(projectName || "Untitled video");
+  const isAifilmMode = (() => {
+    const value = searchParams.get("aifilm")?.trim().toLowerCase();
+    return value === "1" || value === "true";
+  })();
 
   // Sync title with store when project name changes externally (like on initial load)
   useEffect(() => {
@@ -287,7 +292,10 @@ export default function Header() {
     const toastId = toast.loading("\u6b63\u5728\u6253\u5305\u9879\u76ee\u7d20\u6750...");
 
     try {
-      const result = await createAndDownloadProjectAssetBundle({ projectId });
+      const result = await createAndDownloadProjectAssetBundle({
+        projectId,
+        includeAifilm: isAifilmMode,
+      });
       toast.success(
         `\u9879\u76ee\u7d20\u6750\u5305\u5df2\u4e0b\u8f7d\uff1a${result.successCount}/${result.totalAssets}`,
         { id: toastId },
@@ -677,9 +685,7 @@ export default function Header() {
           disabled={!projectId || isBundlingAssets}
         >
           <Download className="size-4" />
-          {isBundlingAssets
-            ? "\u6253\u5305\u4e2d"
-            : "\u4e0b\u8f7d\u9879\u76ee\u7d20\u6750\u5305"}
+          {isBundlingAssets ? "\u6253\u5305\u4e2d" : "\u4e0b\u8f7d\u9879\u76ee\u7d20\u6750\u5305"}
         </Button>
 
         <Button

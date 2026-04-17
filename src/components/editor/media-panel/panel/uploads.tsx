@@ -12,7 +12,7 @@ import type { MediaFile, MediaType } from "@/types/media";
 import type { AifilmMediaItem } from "@/lib/aifilm-media";
 import { uploadFile } from "@/lib/upload-utils";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { clearTimelineAssetDragData, writeTimelineAssetDragData } from "@/lib/timeline-drag";
 interface VisualAsset {
   id: string;
@@ -261,6 +261,7 @@ export default function PanelUploads() {
   const { studio } = useStudioStore();
   const { canvasSize } = useProjectStore();
   const params = useParams();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [uploads, setUploads] = useState<VisualAsset[]>([]);
   const [remoteAssets, setRemoteAssets] = useState<VisualAsset[]>([]);
@@ -277,6 +278,10 @@ export default function PanelUploads() {
     if (Array.isArray(value)) return (value[0] || "").trim();
     return "";
   }, [params]);
+  const aifilmEnabled = useMemo(() => {
+    const value = searchParams.get("aifilm")?.trim().toLowerCase();
+    return value === "1" || value === "true";
+  }, [searchParams]);
 
   // Load storage stats
   const loadStorageStats = useCallback(async () => {
@@ -286,6 +291,13 @@ export default function PanelUploads() {
 
   const loadAifilmAssets = useCallback(
     async (signal?: AbortSignal) => {
+      if (!aifilmEnabled) {
+        setRemoteAssets([]);
+        setRemoteError(null);
+        setIsRemoteLoading(false);
+        return;
+      }
+
       setIsRemoteLoading(true);
 
       try {
@@ -344,7 +356,7 @@ export default function PanelUploads() {
         }
       }
     },
-    [routeProjectId],
+    [aifilmEnabled, routeProjectId],
   );
 
   // Recover uploads from OPFS on mount
